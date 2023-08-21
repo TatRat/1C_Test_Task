@@ -30,7 +30,7 @@ namespace GameLogic.GameZones
 
             _enemySpawnDelay = new WaitForSeconds(spawnTimeout);
             _enemies = new List<EnemyUnit>();
-            _enemyCreationCoroutine = StartCoroutine(CreateEnemy());
+            _enemyCreationCoroutine = StartCoroutine(CreateEnemyCoroutine());
         }
 
         public void Destruct()
@@ -47,21 +47,25 @@ namespace GameLogic.GameZones
             }
         }
 
-        private IEnumerator CreateEnemy()
+        private IEnumerator CreateEnemyCoroutine()
         {
             while (true)
             {
                 yield return _enemySpawnDelay;
-
-                EnemyUnit enemyUnit = _enemyFactory.GetEnemyUnit(new EnemyModel(_enemyConfig.EnemyStartHealth,
-                        Random.Range(_enemyConfig.MinEnemySpeed, _enemyConfig.MaxEnemySpeed)), spawnPoints[Random.Range(0, spawnPoints.Count)].position,
-                    _enemiesContainer);
-                
-                enemyUnit.UnitReachedFinish += OnEnemyReachedFinish;
-                enemyUnit.UnitDestroyed += OnEnemyDied;
-
-                _enemies.Add(enemyUnit);
+                CreateEnemy();
             }
+        }
+
+        private async void CreateEnemy()
+        {
+            EnemyUnit enemyUnit = await _enemyFactory.GetEnemyUnit(new EnemyModel(_enemyConfig.EnemyStartHealth,
+                    Random.Range(_enemyConfig.MinEnemySpeed, _enemyConfig.MaxEnemySpeed)), spawnPoints[Random.Range(0, spawnPoints.Count)].position,
+                _enemiesContainer);
+                
+            enemyUnit.UnitReachedFinish += OnEnemyReachedFinish;
+            enemyUnit.UnitDestroyed += OnEnemyDied;
+
+            _enemies.Add(enemyUnit);
         }
 
         private void OnEnemyDied(EnemyUnit enemyUnit)

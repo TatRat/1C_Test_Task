@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: GameZones
+  m_EditorClassIdentifier: 
+  m_GroupName: GameZones
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0c6b55df6d9af3e4585be059c5d27f00
+  m_SerializeEntries:
+  - m_GUID: d9af02b8c3c2a814682890246cf51b75
+    m_Address: EnemySpawnerView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ce7b958a9140974a9171a215406c09a
+    m_Address: PlayerAreaView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7e29a286e7aaa1d44b64acdd3289af8b, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 264baa1f6f4d53a48a3cfdf489bfd07a, type: 2}
+    - {fileID: 11400000, guid: 63bdb89b1af51be49a993a763f256052, type: 2}

@@ -14,10 +14,10 @@ namespace Infrastructure.StateMachine.States
             HudFactory hudFactory) : base(gameStateMachine, eventProvider) =>
             _hudFactory = hudFactory;
 
-        public override void Enter()
+        public async override void Enter()
         {
             base.Enter();
-            _endGameHeadsUpDisplay = _hudFactory.GetWinHeadsUpDisplay();
+            _endGameHeadsUpDisplay = await _hudFactory.GetWinHeadsUpDisplay();
             _endGameHeadsUpDisplay.Initialize(_eventProvider);
             _endGameHeadsUpDisplay.Enable();
             _eventProvider.Subscribe<RestartButtonPressedEvent>(OnRestartButtonPressed);

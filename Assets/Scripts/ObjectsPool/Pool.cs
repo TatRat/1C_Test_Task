@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 using Object = System.Object;
 
 namespace ObjectsPool
@@ -14,9 +15,11 @@ namespace ObjectsPool
         private readonly bool _autoExpand;
 
         private List<T> _pool;
+        private DiContainer _diContainer;
 
-        public Pool(T poolObjectPrefab, Transform container, int minCapacity, int maxCapacity, bool autoExpand)
+        public Pool(DiContainer diContainer, T poolObjectPrefab, Transform container, int minCapacity, int maxCapacity, bool autoExpand)
         {
+            _diContainer = diContainer;
             _poolObjectPrefab = poolObjectPrefab;
             _container = container;
             _minCapacity = minCapacity;
@@ -54,7 +57,7 @@ namespace ObjectsPool
 
         private T CreateElement(bool isActiveByDefault = false)
         {
-            T createdObject = UnityEngine.Object.Instantiate(_poolObjectPrefab, _container);
+            T createdObject = _diContainer.InstantiatePrefabForComponent<T>(_poolObjectPrefab, _container);
             createdObject.gameObject.SetActive(isActiveByDefault);
             _pool.Add(createdObject);
 

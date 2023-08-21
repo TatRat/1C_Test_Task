@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Threading.Tasks;
 using Configs;
 using Factories;
 using Infrastructure.Services;
@@ -6,12 +7,12 @@ using Infrastructure.StateMachine;
 using Infrastructure.StateMachine.States;
 using Input;
 using UnityEngine;
+using Zenject;
 
 namespace Infrastructure
 {
     public class GameBootstrapper : MonoBehaviour
     {
-        [SerializeField] private MonoService monoService;
         [SerializeField] private Camera camera;
 
         [Header("Containers")]
@@ -21,38 +22,41 @@ namespace Infrastructure
         [SerializeField] private Transform hudContainer;
 
         private GameStateMachine _gameStateMachine;
-        private EventProvider.EventProvider _eventProvider;
-        private IInputService _inputService;
-        
-        private HudFactory _hudFactory;
-        private EnemyFactory _enemyFactory;
-        private GameFactory _gameFactory;
-        private PlayerFactory _playerFactory;
-        
+
         private GameSettingsConfig _gameSettingsConfig;
         private EnemyConfig _enemyConfig;
         private PlayerConfig _playerConfig;
+        private MonoService _monoService;
+        private PlayerFactory _playerFactory;
+        private GameFactory _gameFactory;
+        private EnemyFactory _enemyFactory;
+        private HudFactory _hudFactory;
+        private EventProvider.EventProvider _eventProvider;
+        private IInputService _inputService;
+
+        [Inject]
+        private void Construct(MonoService monoService, HudFactory hudFactory, EnemyFactory enemyFactory, GameFactory gameFactory, PlayerFactory playerFactory, EventProvider.EventProvider eventProvider, IInputService inputService)
+        {
+            _inputService = inputService;
+            _eventProvider = eventProvider;
+            _hudFactory = hudFactory;
+            _enemyFactory = enemyFactory;
+            _gameFactory = gameFactory;
+            _playerFactory = playerFactory;
+            _monoService = monoService;
+        }
 
         private void Start() => 
-            monoService.StartCoroutine(BootstrapCoroutine());
+            _monoService.StartCoroutine(BootstrapCoroutine());
 
         private IEnumerator BootstrapCoroutine()
         {
-            yield return BindServices();
             yield return BindFactories();
             yield return BindConfigs();
             yield return BindStateMachine();
             yield return PostBind();
-        }
-
-        private IEnumerator BindServices()
-        {
-            _eventProvider = new EventProvider.EventProvider();
-            _inputService = new DesktopInputService(monoService);
-            
-            yield break;
-        }
-
+        } 
+        
         private IEnumerator BindStateMachine()
         {
             _gameStateMachine = new GameStateMachine();
@@ -67,21 +71,16 @@ namespace Infrastructure
 
         private IEnumerator BindFactories()
         {
-            _hudFactory = new HudFactory(hudContainer);
-            _playerFactory = new PlayerFactory(playerContainer);
-            _gameFactory = new GameFactory();
-            _enemyFactory = new EnemyFactory();
-            
+            _hudFactory.Initialize(hudContainer);
+            _playerFactory.Initialize(playerContainer);
+
             yield break;
         }
         
         private IEnumerator BindConfigs()
         {
-            _gameSettingsConfig = _gameFactory.GetConfig<GameSettingsConfig>();
-            _enemyConfig = _gameFactory.GetConfig<EnemyConfig>();
-            _playerConfig = _gameFactory.GetConfig<PlayerConfig>();
-            
-            yield break;
+            Task loadConfigs = LoadConfigs();
+            yield return new WaitUntil(() => loadConfigs.IsCompleted);
         }
 
         private IEnumerator PostBind()
@@ -90,6 +89,13 @@ namespace Infrastructure
             _gameStateMachine.Enable();
             
             yield break;
+        }
+
+        private async Task LoadConfigs()
+        {
+            _gameSettingsConfig = await _gameFactory.GetConfig<GameSettingsConfig>();
+            _enemyConfig = await _gameFactory.GetConfig<EnemyConfig>();
+            _playerConfig = await _gameFactory.GetConfig<PlayerConfig>();
         }
     }
 }

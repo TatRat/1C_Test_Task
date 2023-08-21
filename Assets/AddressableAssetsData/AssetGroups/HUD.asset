@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: HUD
+  m_EditorClassIdentifier: 
+  m_GroupName: HUD
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 395c3e2dee132d9468154a6c61096d68
+  m_SerializeEntries:
+  - m_GUID: 3c107d89ed379d444b6ef214218a28ea
+    m_Address: DefeatHeadsUpDisplay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85de21108fcca234c8708c400a88b4ce
+    m_Address: WinHeadsUpDisplay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78c9ba4d176750a4da0370cb3e5e3b7e
+    m_Address: RoundHeadsUpDisplay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7e29a286e7aaa1d44b64acdd3289af8b, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 13c8909b6c8526b4c8a953c993b31445, type: 2}
+    - {fileID: 11400000, guid: 8cf3af79cf98c5540a3811c24a5fac04, type: 2}

@@ -1,19 +1,26 @@
-﻿using GameLogic.Enemies;
+﻿using System.Threading.Tasks;
+using GameLogic.Enemies;
+using Infrastructure.Services;
 using UnityEngine;
+using Zenject;
 
 namespace Factories
 {
     public class EnemyFactory
     {
-        private const string EnemyUnitPath = "Prefabs/Units/EnemyUnit";
-        private readonly EnemyUnit _enemyUnitPrefab;
+        private readonly AssetProvider _assetProvider;
+        private readonly DiContainer _diContainer;
+        private const string EnemyUnitAddress = "EnemyUnit";
 
-        public EnemyFactory() => 
-            _enemyUnitPrefab = Resources.Load<EnemyUnit>(EnemyUnitPath);
-
-        public EnemyUnit GetEnemyUnit(EnemyModel enemyModel, Vector3 spawnPoint, Transform parent)
+        public EnemyFactory(AssetProvider assetProvider, DiContainer diContainer)
         {
-            EnemyUnit enemyUnit = UnityEngine.Object.Instantiate(_enemyUnitPrefab, spawnPoint, Quaternion.identity, parent);
+            _assetProvider = assetProvider;
+            _diContainer = diContainer;
+        }
+
+        public async Task<EnemyUnit> GetEnemyUnit(EnemyModel enemyModel, Vector3 spawnPoint, Transform parent)
+        {
+            EnemyUnit enemyUnit = _diContainer.InstantiatePrefabForComponent<EnemyUnit>(await _assetProvider.Load<GameObject>(EnemyUnitAddress), spawnPoint, Quaternion.identity, parent);
             enemyUnit.Initialize(enemyModel);
             
             return enemyUnit;

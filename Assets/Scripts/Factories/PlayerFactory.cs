@@ -1,33 +1,46 @@
-﻿using GameLogic.Player;
+﻿using System.Threading.Tasks;
+using GameLogic.Player;
+using Infrastructure.Services;
 using Input;
 using ObjectsPool;
 using UnityEngine;
+using Zenject;
 
 namespace Factories
 {
     public class PlayerFactory
     {
-        private const string BulletPath = "Prefabs/Bullets/Bullet";
-        private const string PlayerUnitPath = "Prefabs/Units/PlayerUnit";
+        private const string BulletAddress = "Bullet";
+        private const string PlayerUnitAddress = "PlayerUnit";
         private const int MinCount = 5;
         private const int MaxCount = 20;
 
-        private readonly Pool<Bullet> _bulletsPool;
-        
-        public PlayerFactory(Transform bulletsContainer)
+        private Pool<Bullet> _bulletsPool;
+        private AssetProvider _assetProvider;
+        private DiContainer _diContainer;
+
+        public PlayerFactory(AssetProvider assetProvider, DiContainer diContainer)
         {
-            _bulletsPool = new Pool<Bullet>(Resources.Load<Bullet>(BulletPath), bulletsContainer, MinCount, MaxCount, true);
+            _diContainer = diContainer;
+            _assetProvider = assetProvider;
+        }
+
+        public async Task Initialize(Transform bulletsContainer)
+        {
+            _bulletsPool = new Pool<Bullet>(_diContainer, (await _assetProvider.Load<GameObject>(BulletAddress)).GetComponent<Bullet>(), bulletsContainer, MinCount, MaxCount, true);
             _bulletsPool.Initialize();
         }
 
-        public Bullet GetBullet(Vector3 position) => 
+        public Bullet GetBullet(Vector3 position) =>
             _bulletsPool.GetFreeElement(position);
 
-        public PlayerUnit GetPlayerUnit(IInputService inputService, PlayerModel playerModel, PlayerFactory playerFactory, Vector3 position)
+        public async Task<PlayerUnit> GetPlayerUnit(IInputService inputService, PlayerModel playerModel,
+            PlayerFactory playerFactory, Vector3 position)
         {
-            PlayerUnit playerUnit = Object.Instantiate(Resources.Load<PlayerUnit>(PlayerUnitPath), position, Quaternion.identity);
+            PlayerUnit playerUnit =
+                _diContainer.InstantiatePrefabForComponent<PlayerUnit>(await _assetProvider.Load<GameObject>(PlayerUnitAddress), position, Quaternion.identity, null);
             playerUnit.Initialize(inputService, playerModel, playerFactory);
-            
+
             return playerUnit;
         }
     }
