@@ -1,4 +1,5 @@
 ﻿using GameLogic.Player;
+using Input;
 using ObjectsPool;
 using UnityEngine;
 
@@ -19,10 +20,15 @@ namespace Factories
             _bulletsPool.Initialize();
         }
 
-        public PlayerUnit GetPlayerUnit(Vector3 position) => 
-            Object.Instantiate(Resources.Load<PlayerUnit>(PlayerUnitPath), position, Quaternion.identity);
-
         public Bullet GetBullet(Vector3 position) => 
             _bulletsPool.GetFreeElement(position);
+
+        public PlayerUnit GetPlayerUnit(IInputService inputService, PlayerModel playerModel, PlayerFactory playerFactory, Vector3 position)
+        {
+            PlayerUnit playerUnit = Object.Instantiate(Resources.Load<PlayerUnit>(PlayerUnitPath), position, Quaternion.identity);
+            playerUnit.Initialize(inputService, playerModel, playerFactory);
+            
+            return playerUnit;
+        }
     }
 }

@@ -63,24 +63,19 @@ namespace Infrastructure.StateMachine.States
             _health = _playerConfig.PlayerStartHealth;
             _enemiesToKill = Random.Range(_enemyConfig.MinEnemiesCount, _enemyConfig.MaxEnemiesCount);
 
-            _roundHeadsUpDisplay = _hudFactory.GetRoundHeadsUpDisplay();
+            _roundHeadsUpDisplay = _hudFactory.GetRoundHeadsUpDisplay(_eventProvider, _health);
             
-            _playerAreaView = _gameFactory.GetPlayerAreaView(_areasContainer);
-            _enemySpawnerView = _gameFactory.GetEnemySpawnerView(_camera.ViewportToWorldPoint(new Vector3(0.5f,
-                    _gameSettingsConfig.EnemySpawnersVerticalPositionOnScreenPercent, _camera.nearClipPlane)), _areasContainer);
-            _playerUnit = _playerFactory.GetPlayerUnit(_camera.ViewportToWorldPoint(new Vector3(0.5f,
-                _gameSettingsConfig.FinishLineVerticalPositionOnScreenPercent / 2, _camera.nearClipPlane)));
-
             Vector2 playerAreaRightTopPoint = _camera.ViewportToWorldPoint(new Vector3(1,
                 _gameSettingsConfig.FinishLineVerticalPositionOnScreenPercent, _camera.nearClipPlane));
             Vector2 playerAreaLeftDownPoint = _camera.ViewportToWorldPoint(new Vector3(0, 0, _camera.nearClipPlane));
             
-            _playerAreaView.Initialize(playerAreaRightTopPoint, playerAreaLeftDownPoint);
-            _enemySpawnerView.Initialize(_enemyFactory, _enemyConfig, _enemiesContainer,
-                Random.Range(_enemyConfig.MinEnemySpawnTimeOut, _enemyConfig.MaxEnemySpawnTimeOut));
-            _playerUnit.Initialize(_inputService, new PlayerModel(_playerConfig.PlayerSpeed, _playerConfig.AttackRate, _playerConfig.AutomaticAttackRange, playerAreaRightTopPoint, playerAreaLeftDownPoint), _playerFactory);
-            _roundHeadsUpDisplay.Initialize(_eventProvider, _health);
-            
+            _playerAreaView = _gameFactory.GetPlayerAreaView(playerAreaRightTopPoint, playerAreaLeftDownPoint, _areasContainer);
+            _enemySpawnerView = _gameFactory.GetEnemySpawnerView(_enemyFactory, _enemyConfig, _enemiesContainer,
+                Random.Range(_enemyConfig.MinEnemySpawnTimeOut, _enemyConfig.MaxEnemySpawnTimeOut), _camera.ViewportToWorldPoint(new Vector3(0.5f,
+                    _gameSettingsConfig.EnemySpawnersVerticalPositionOnScreenPercent, _camera.nearClipPlane)), _areasContainer);
+            _playerUnit = _playerFactory.GetPlayerUnit(_inputService, new PlayerModel(_playerConfig.PlayerSpeed, _playerConfig.AttackRate, _playerConfig.AutomaticAttackRange, playerAreaRightTopPoint, playerAreaLeftDownPoint), _playerFactory, _camera.ViewportToWorldPoint(new Vector3(0.5f,
+                _gameSettingsConfig.FinishLineVerticalPositionOnScreenPercent / 2, _camera.nearClipPlane)));
+
             _enemySpawnerView.EnemyKilled += OnEnemyKilled;
             _playerAreaView.EnemyReachedFinish += OnEnemyReachedDestination;
             

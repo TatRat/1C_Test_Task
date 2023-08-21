@@ -1,5 +1,6 @@
 ﻿using HUD;
 using UnityEngine;
+using EventProvider = EventProvider.EventProvider;
 
 namespace Factories
 {
@@ -14,13 +15,18 @@ namespace Factories
         public HudFactory(Transform hudTransform) => 
             _hudTransform = hudTransform;
 
-        public RoundHeadsUpDisplay GetRoundHeadsUpDisplay() => 
-            Object.Instantiate(Resources.Load<RoundHeadsUpDisplay>(RoundHeadsUpDisplayPath), _hudTransform);
-
         public EndGameHeadsUpDisplay GetWinHeadsUpDisplay() => 
             Object.Instantiate(Resources.Load<EndGameHeadsUpDisplay>(WinHeadsUpDisplayPath), _hudTransform);
 
         public EndGameHeadsUpDisplay GetDefeatHeadsUpDisplay() => 
             Object.Instantiate(Resources.Load<EndGameHeadsUpDisplay>(DefeatHeadsUpDisplayPath), _hudTransform);
+
+        public RoundHeadsUpDisplay GetRoundHeadsUpDisplay(global::EventProvider.EventProvider eventProvider, int health)
+        {
+            RoundHeadsUpDisplay roundHeadsUpDisplay = Object.Instantiate(Resources.Load<RoundHeadsUpDisplay>(RoundHeadsUpDisplayPath), _hudTransform);
+            roundHeadsUpDisplay.Initialize(eventProvider, health);
+            
+            return roundHeadsUpDisplay;
+        }
     }
 }

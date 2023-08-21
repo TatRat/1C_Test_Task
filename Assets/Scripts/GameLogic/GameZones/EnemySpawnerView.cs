@@ -53,10 +53,10 @@ namespace GameLogic.GameZones
             {
                 yield return _enemySpawnDelay;
 
-                EnemyUnit enemyUnit = _enemyFactory.GetEnemyUnit(spawnPoints[Random.Range(0, spawnPoints.Count)].position,
+                EnemyUnit enemyUnit = _enemyFactory.GetEnemyUnit(new EnemyModel(_enemyConfig.EnemyStartHealth,
+                        Random.Range(_enemyConfig.MinEnemySpeed, _enemyConfig.MaxEnemySpeed)), spawnPoints[Random.Range(0, spawnPoints.Count)].position,
                     _enemiesContainer);
-                enemyUnit.Initialize(new EnemyModel(_enemyConfig.EnemyStartHealth,
-                    Random.Range(_enemyConfig.MinEnemySpeed, _enemyConfig.MaxEnemySpeed)));
+                
                 enemyUnit.UnitReachedFinish += OnEnemyReachedFinish;
                 enemyUnit.UnitDestroyed += OnEnemyDied;
 
