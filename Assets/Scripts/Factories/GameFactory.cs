@@ -32,10 +32,10 @@ namespace Factories
             return playerAreaView;
         }
 
-        public async Task<EnemySpawnerView> GetEnemySpawnerView(EnemyFactory enemyFactory, EnemyConfig enemyConfig, Transform enemiesContainer, float range, Vector3 spawnPosition, Transform parent)
+        public async Task<EnemySpawnerView> GetEnemySpawnerView(EnemyConfig enemyConfig, Transform enemiesContainer, Vector3 spawnPosition, Transform parent)
         {
             EnemySpawnerView enemySpawnerView = _diContainer.InstantiatePrefabForComponent<EnemySpawnerView>(await _assetProvider.Load<GameObject>(EnemySpawnerViewAddress), spawnPosition, Quaternion.identity, parent);
-            enemySpawnerView.Initialize(enemyFactory, enemyConfig, enemiesContainer,
+            enemySpawnerView.Initialize(enemyConfig, enemiesContainer,
                 Random.Range(enemyConfig.MinEnemySpawnTimeOut, enemyConfig.MaxEnemySpawnTimeOut));
             
             return enemySpawnerView;

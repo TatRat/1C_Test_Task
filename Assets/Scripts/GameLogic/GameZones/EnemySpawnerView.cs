@@ -5,6 +5,7 @@ using Configs;
 using Factories;
 using GameLogic.Enemies;
 using UnityEngine;
+using Zenject;
 using Random = UnityEngine.Random;
 
 namespace GameLogic.GameZones
@@ -22,10 +23,13 @@ namespace GameLogic.GameZones
         private Coroutine _enemyCreationCoroutine;
         private WaitForSeconds _enemySpawnDelay;
 
-        public void Initialize(EnemyFactory enemyFactory, EnemyConfig enemyConfig, Transform enemiesContainer, float spawnTimeout)
+        [Inject]
+        void Construct(EnemyFactory enemyFactory) => 
+            _enemyFactory = enemyFactory;
+
+        public void Initialize(EnemyConfig enemyConfig, Transform enemiesContainer, float spawnTimeout)
         {
             _enemyConfig = enemyConfig;
-            _enemyFactory = enemyFactory;
             _enemiesContainer = enemiesContainer;
 
             _enemySpawnDelay = new WaitForSeconds(spawnTimeout);

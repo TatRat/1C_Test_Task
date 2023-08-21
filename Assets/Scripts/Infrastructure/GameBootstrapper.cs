@@ -60,7 +60,7 @@ namespace Infrastructure
         private IEnumerator BindStateMachine()
         {
             _gameStateMachine = new GameStateMachine();
-            _gameStateMachine.AddState(new RoundState(_gameStateMachine, _eventProvider, _enemyFactory, _gameFactory,
+            _gameStateMachine.AddState(new RoundState(_gameStateMachine, _eventProvider, _gameFactory,
                 _hudFactory, _playerFactory, areasContainer, enemiesContainer, camera, _gameSettingsConfig,
                 _enemyConfig, _playerConfig, _inputService));
             _gameStateMachine.AddState(new WinState(_gameStateMachine, _eventProvider, _hudFactory));

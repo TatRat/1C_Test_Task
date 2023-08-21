@@ -1,6 +1,7 @@
 ﻿using EventProvider.Events;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace HUD
 {
@@ -10,7 +11,8 @@ namespace HUD
         
         private EventProvider.EventProvider _eventProvider;
 
-        public void Initialize(EventProvider.EventProvider eventProvider) => 
+        [Inject]
+        private void Construct(EventProvider.EventProvider eventProvider) => 
             _eventProvider = eventProvider;
 
         public void Enable() => 

@@ -14,11 +14,10 @@ namespace Infrastructure.StateMachine.States
             HudFactory hudFactory) : base(gameStateMachine, eventProvider) =>
             _hudFactory = hudFactory;
 
-        public async override void Enter()
+        public override async void Enter()
         {
             base.Enter();
             _endGameHeadsUpDisplay = await _hudFactory.GetWinHeadsUpDisplay();
-            _endGameHeadsUpDisplay.Initialize(_eventProvider);
             _endGameHeadsUpDisplay.Enable();
             _eventProvider.Subscribe<RestartButtonPressedEvent>(OnRestartButtonPressed);
         }
@@ -31,7 +30,7 @@ namespace Infrastructure.StateMachine.States
             Object.Destroy(_endGameHeadsUpDisplay.gameObject);
         }
 
-        private void OnRestartButtonPressed(RestartButtonPressedEvent restartButtonPressedEvent) => 
+        private void OnRestartButtonPressed(RestartButtonPressedEvent restartButtonPressedEvent) =>
             _gameStateMachine.ChangeState<RoundState>();
     }
 }

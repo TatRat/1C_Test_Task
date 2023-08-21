@@ -18,7 +18,6 @@ namespace Infrastructure.StateMachine.States
         {
             base.Enter();
             _endGameHeadsUpDisplay = await _hudFactory.GetDefeatHeadsUpDisplay();
-            _endGameHeadsUpDisplay.Initialize(_eventProvider);
             _endGameHeadsUpDisplay.Enable();
             _eventProvider.Subscribe<RestartButtonPressedEvent>(OnRestartButtonPressed);
         }

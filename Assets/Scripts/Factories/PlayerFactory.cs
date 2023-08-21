@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GameLogic.Player;
 using Infrastructure.Services;
-using Input;
 using ObjectsPool;
 using UnityEngine;
 using Zenject;
@@ -34,12 +33,11 @@ namespace Factories
         public Bullet GetBullet(Vector3 position) =>
             _bulletsPool.GetFreeElement(position);
 
-        public async Task<PlayerUnit> GetPlayerUnit(IInputService inputService, PlayerModel playerModel,
-            PlayerFactory playerFactory, Vector3 position)
+        public async Task<PlayerUnit> GetPlayerUnit(PlayerModel playerModel, Vector3 position)
         {
             PlayerUnit playerUnit =
                 _diContainer.InstantiatePrefabForComponent<PlayerUnit>(await _assetProvider.Load<GameObject>(PlayerUnitAddress), position, Quaternion.identity, null);
-            playerUnit.Initialize(inputService, playerModel, playerFactory);
+            playerUnit.Initialize(playerModel);
 
             return playerUnit;
         }

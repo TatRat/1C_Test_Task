@@ -3,7 +3,6 @@ using HUD;
 using Infrastructure.Services;
 using UnityEngine;
 using Zenject;
-using EventProvider = EventProvider.EventProvider;
 
 namespace Factories
 {
@@ -32,10 +31,10 @@ namespace Factories
         public async Task<EndGameHeadsUpDisplay> GetDefeatHeadsUpDisplay() => 
             _diContainer.InstantiatePrefabForComponent<EndGameHeadsUpDisplay>(await _assetProvider.Load<GameObject>(DefeatHeadsUpDisplayAddress), _hudTransform);
 
-        public async Task<RoundHeadsUpDisplay> GetRoundHeadsUpDisplay(global::EventProvider.EventProvider eventProvider, int health)
+        public async Task<RoundHeadsUpDisplay> GetRoundHeadsUpDisplay(int health)
         {
             RoundHeadsUpDisplay roundHeadsUpDisplay = _diContainer.InstantiatePrefabForComponent<RoundHeadsUpDisplay>(await _assetProvider.Load<GameObject>(RoundHeadsUpDisplayAddress), _hudTransform);
-            roundHeadsUpDisplay.Initialize(eventProvider, health);
+            roundHeadsUpDisplay.Initialize(health);
             
             return roundHeadsUpDisplay;
         }
