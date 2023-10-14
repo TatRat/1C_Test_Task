@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using HUD;
 using Infrastructure.Services;
 using UnityEngine;
@@ -25,13 +26,13 @@ namespace Factories
         public void Initialize(Transform hudTransform) => 
             _hudTransform = hudTransform;
 
-        public async Task<EndGameHeadsUpDisplay> GetWinHeadsUpDisplay() => 
+        public async UniTask<EndGameHeadsUpDisplay> GetWinHeadsUpDisplay() => 
             _diContainer.InstantiatePrefabForComponent<EndGameHeadsUpDisplay>(await _assetProvider.Load<GameObject>(WinHeadsUpDisplayAddress), _hudTransform);
 
-        public async Task<EndGameHeadsUpDisplay> GetDefeatHeadsUpDisplay() => 
+        public async UniTask<EndGameHeadsUpDisplay> GetDefeatHeadsUpDisplay() => 
             _diContainer.InstantiatePrefabForComponent<EndGameHeadsUpDisplay>(await _assetProvider.Load<GameObject>(DefeatHeadsUpDisplayAddress), _hudTransform);
 
-        public async Task<RoundHeadsUpDisplay> GetRoundHeadsUpDisplay(int health)
+        public async UniTask<RoundHeadsUpDisplay> GetRoundHeadsUpDisplay(int health)
         {
             RoundHeadsUpDisplay roundHeadsUpDisplay = _diContainer.InstantiatePrefabForComponent<RoundHeadsUpDisplay>(await _assetProvider.Load<GameObject>(RoundHeadsUpDisplayAddress), _hudTransform);
             roundHeadsUpDisplay.Initialize(health);

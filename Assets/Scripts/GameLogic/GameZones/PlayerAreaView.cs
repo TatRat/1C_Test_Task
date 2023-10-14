@@ -14,7 +14,6 @@ namespace GameLogic.GameZones
         {
             transform.position = new Vector3(0, playerAreaRightTopPoint.y);
 
-            Bounds bounds = areaCollider.bounds;
             areaCollider.offset = new Vector2(0, (playerAreaLeftDownPoint.y - playerAreaRightTopPoint.y) / 2);
             areaCollider.size = new Vector2((playerAreaRightTopPoint.x - playerAreaLeftDownPoint.x),
                 (playerAreaRightTopPoint.y - playerAreaLeftDownPoint.y));

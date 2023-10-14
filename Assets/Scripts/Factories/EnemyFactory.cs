@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameLogic.Enemies;
 using Infrastructure.Services;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Factories
             _diContainer = diContainer;
         }
 
-        public async Task<EnemyUnit> GetEnemyUnit(EnemyModel enemyModel, Vector3 spawnPoint, Transform parent)
+        public async UniTask<EnemyUnit> GetEnemyUnit(EnemyModel enemyModel, Vector3 spawnPoint, Transform parent)
         {
             EnemyUnit enemyUnit = _diContainer.InstantiatePrefabForComponent<EnemyUnit>(await _assetProvider.Load<GameObject>(EnemyUnitAddress), spawnPoint, Quaternion.identity, parent);
             enemyUnit.Initialize(enemyModel);

@@ -114,7 +114,6 @@ namespace Infrastructure.StateMachine.States
             Object.Destroy(_playerAreaView.gameObject);
             Object.Destroy(_enemySpawnerView.gameObject);
             Object.Destroy(_roundHeadsUpDisplay.gameObject);
-            
         }
     }
 }

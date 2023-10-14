@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -13,7 +14,7 @@ namespace Infrastructure.Services
         public void Initialize() => 
             Addressables.InitializeAsync();
 
-        public async Task<T> Load<T>(AssetReference assetReference) where T : class
+        public async UniTask<T> Load<T>(AssetReference assetReference) where T : class
         {
             if (_completedCache.TryGetValue(assetReference.AssetGUID, out AsyncOperationHandle completedHandle))
                 return completedHandle.Result as T;
@@ -21,16 +22,15 @@ namespace Infrastructure.Services
                 assetReference.AssetGUID);
         }
         
-        public async Task<T> Load<T>(string address) where T : class
+        public async UniTask<T> Load<T>(string address) where T : class
         {
             if (_completedCache.TryGetValue(address, out AsyncOperationHandle completedHandle))
                 return completedHandle.Result as T;
 
-            return await RunWithCacheOnComplete(Addressables.LoadAssetAsync<T>(address),
-                address);
+            return await RunWithCacheOnComplete(Addressables.LoadAssetAsync<T>(address), address);
         }
 
-        private async Task<T> RunWithCacheOnComplete<T>(AsyncOperationHandle<T> handle, string cacheKey) where T : class
+        private async UniTask<T> RunWithCacheOnComplete<T>(AsyncOperationHandle<T> handle, string cacheKey) where T : class
         {
             handle.Completed += completeHandle =>
             {

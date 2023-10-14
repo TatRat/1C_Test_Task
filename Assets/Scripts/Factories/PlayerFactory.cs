@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using GameLogic.Player;
 using Infrastructure.Services;
 using ObjectsPool;
@@ -24,7 +25,7 @@ namespace Factories
             _assetProvider = assetProvider;
         }
 
-        public async Task Initialize(Transform bulletsContainer)
+        public async UniTask Initialize(Transform bulletsContainer)
         {
             _bulletsPool = new Pool<Bullet>(_diContainer, (await _assetProvider.Load<GameObject>(BulletAddress)).GetComponent<Bullet>(), bulletsContainer, MinCount, MaxCount, true);
             _bulletsPool.Initialize();
@@ -33,7 +34,7 @@ namespace Factories
         public Bullet GetBullet(Vector3 position) =>
             _bulletsPool.GetFreeElement(position);
 
-        public async Task<PlayerUnit> GetPlayerUnit(PlayerModel playerModel, Vector3 position)
+        public async UniTask<PlayerUnit> GetPlayerUnit(PlayerModel playerModel, Vector3 position)
         {
             PlayerUnit playerUnit =
                 _diContainer.InstantiatePrefabForComponent<PlayerUnit>(await _assetProvider.Load<GameObject>(PlayerUnitAddress), position, Quaternion.identity, null);
